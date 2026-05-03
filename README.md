@@ -102,3 +102,9 @@ def get_data(sql, project_id, force=False):
 **What happens next**: Claude will write the SQL, use MCP to run the cell and test it, save the parquet file, and generate your chart and Excel file. [cite_start]You just sit back and watch the notebook update itself. [cite: 93, 94, 95, 96]
 
 How does this setup look to you for a first home trial?
+
+## additional commands
+
+```
+uv add jupytext jupyterlab
+```

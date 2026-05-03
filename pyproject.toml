@@ -1,0 +1,15 @@
+[project]
+name = "20260503-analyst-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+# Limit the range so uv doesn't try to resolve for experimental versions
+requires-python = ">=3.11, <3.14"
+dependencies = [
+    "google-cloud-bigquery>=3.41.0",
+    "jupyterlab>=4.5.7",
+    "jupytext>=1.19.1",
+    "pandas>=3.0.2",
+    "pandas-gbq>=0.35.0",
+    "pyarrow>=24.0.0",
+]
