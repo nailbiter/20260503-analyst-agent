@@ -14,36 +14,52 @@ Here is your step-by-step guide to setting up the **Jupyter MCP + Jupytext** wor
 
 ```bash
 # Core data stack
-pip install pandas pandas-gbq pyarrow jupyterlab jupytext
-
-# Configure Jupytext to always pair .ipynb with .py (percent format)
-jupyter nbextension install --py jupytext
-jupyter nbextension enable --py jupytext
+uv add pandas pandas-gbq pyarrow google-cloud-bigquery jupyterlab jupytext
 ```
 
-**Why this matters**: Claude Code will edit the `.py` file (clean text), while you keep the `.ipynb` open in Jupyter Lab to see the results. [cite_start]Jupytext keeps them in perfect sync. [cite: 58, 60, 61]
+The JupyterLab extension is bundled with the `jupytext` package and activates automatically on server start — no separate extension install needed.
+
+To enable `.ipynb` ↔ `.py` pairing for all notebooks in the project, add this to `pyproject.toml`:
+
+```toml
+[tool.jupytext]
+formats = "ipynb,py:percent"
+```
+
+Or pair a single notebook once via CLI:
+
+```bash
+jupytext --set-formats ipynb,py:percent analysis.py
+```
+
+**Why this matters**: Claude Code will edit the `.py` file (clean text), while you keep the `.ipynb` open in Jupyter Lab to see the results. Jupytext keeps them in perfect sync.
 
 ---
 
 ### Phase 3: The "Warm-Kernel" (Jupyter MCP)
 [cite_start]This is the "secondary objective" you asked for: giving Claude tools to "look" at data and execute code in a live session. [cite: 19, 20]
 
-1.  **Install an MCP Server**: Use a community-standard server like `mcp-server-jupyter`.
-    ```bash
-    npm install -g @modelcontextprotocol/server-jupyter
-    ```
-2.  **Configure Claude Code**: Add the server to your Claude Code configuration (usually in `~/.claude/config.json` or through the CLI).
+1.  **No install needed**: The MCP server (`mcp-jupyter` by Block) runs via `uvx` which is already available with uv.
+
+2.  **Configure Claude Code**: Create `.mcp.json` at the project root:
     ```json
     {
       "mcpServers": {
         "jupyter": {
-          "command": "npx",
-          "args": ["-y", "@modelcontextprotocol/server-jupyter"]
+          "command": "uvx",
+          "args": ["mcp-jupyter"],
+          "env": { "TOKEN": "YOUR_JUPYTER_TOKEN" }
         }
       }
     }
     ```
-3.  **The Result**: When you run Claude Code in your project folder, it will now have tools like `execute_code` and `list_variables`. [cite_start]It can "see" your dataframe in real-time. [cite: 78, 79, 80]
+
+3.  **Start JupyterLab with a matching token**:
+    ```bash
+    jupyter lab --IdentityProvider.token YOUR_JUPYTER_TOKEN
+    ```
+
+4.  **The Result**: When you run Claude Code in your project folder, it will have tools like `execute_code` and `list_variables` to see your dataframe in real-time.
 
 ---
 
@@ -102,9 +118,3 @@ def get_data(sql, project_id, force=False):
 **What happens next**: Claude will write the SQL, use MCP to run the cell and test it, save the parquet file, and generate your chart and Excel file. [cite_start]You just sit back and watch the notebook update itself. [cite: 93, 94, 95, 96]
 
 How does this setup look to you for a first home trial?
-
-## additional commands
-
-```
-uv add jupytext jupyterlab
-```
