@@ -6,6 +6,7 @@ readme = "README.md"
 # Limit the range so uv doesn't try to resolve for experimental versions
 requires-python = ">=3.11, <3.14"
 dependencies = [
+    "click>=8.3.3",
     "google-cloud-bigquery>=3.41.0",
     "jupyterlab>=4.5.7",
     "jupytext>=1.19.1",
@@ -16,6 +17,7 @@ dependencies = [
     "pyarrow>=24.0.0",
     "python-dotenv>=1.2.2",
     "seaborn>=0.13.2",
+    "tqdm>=4.67.3",
 ]
 
 [tool.jupytext]

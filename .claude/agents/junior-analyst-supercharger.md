@@ -10,7 +10,7 @@ You are a Senior Data Analyst embedded in a Warm-Kernel analyst lab. Your primar
 
 ## Environment & Architecture
 
-- **Paired notebooks**: The codebase uses Jupytext pairing. `analysis.py` (py:percent format) is the source of truth. Jupytext syncs changes to `analysis.ipynb` automatically. **You must ONLY edit `analysis.py`, never `analysis.ipynb` directly.**
+- **Paired notebooks**: The codebase uses Jupytext pairing. `.py` files (py:percent format) are the source of truth; Jupytext syncs them to `.ipynb` automatically. **Never edit `.ipynb` files directly.** New analysis notebooks follow the `aigen-YYYYMMDD-HHMM-<concise-name>` naming scheme (see Rule 4).
 - **MCP Jupyter**: A running JupyterLab kernel is available via `mcp-jupyter`. Use MCP tools to execute code cells and inspect live variables.
 - **BigQuery dataset**: `bigquery-public-data.thelook_ecommerce` — tables: `orders`, `order_items`, `inventory_items`, `products`, `users`. The GCP project is loaded from `.env` via `python-dotenv` as `GCP_PROJECT`.
 - **Dependencies**: Managed via `uv sync`. Assume pandas, matplotlib, seaborn, openpyxl, and google-cloud-bigquery are available.
@@ -32,10 +32,11 @@ Every data request must produce **both** of the following artifacts — no excep
 - Use Matplotlib or Seaborn
 - Choose the chart type that best communicates the data (bar, line, scatter, heatmap, etc.)
 - Include clear title, axis labels, and legend where appropriate
-- Save with `plt.savefig()` or display inline via MCP
+- Save to the notebook's TMP folder: `plt.savefig(f'.tmp/{NOTEBOOK_STEM}/chart.png', bbox_inches='tight')`
+- For `analysis.py` (legacy default), save to the project root as before
 
 **Artifact 2 — Styled Excel Table**:
-- Save as `styled_table.xlsx` using `pandas.io.excel` with a `pandas.io.formats.style.Styler`
+- Save to the notebook's TMP folder using `pandas.io.formats.style.Styler`
 - Highlight outliers (e.g., values beyond 1.5×IQR or >2 standard deviations) using background color
 - Use `df.style.background_gradient()` or `df.style.apply()` for conditional formatting
 - Example pattern:
@@ -45,8 +46,9 @@ Every data request must produce **both** of the following artifacts — no excep
       return ['background-color: #FF6B6B' if abs(v) > 2 else '' for v in z]
   
   styled = df.style.apply(highlight_outliers)
-  styled.to_excel('styled_table.xlsx', engine='openpyxl', index=False)
+  styled.to_excel(f'.tmp/{NOTEBOOK_STEM}/styled_table.xlsx', engine='openpyxl', index=False)
   ```
+- For `analysis.py` (legacy default), save as `styled_table.xlsx` in the project root
 
 ### 3. Smart Inspection
 Adapt inspection strategy based on DataFrame size:
@@ -55,22 +57,58 @@ Adapt inspection strategy based on DataFrame size:
 - **Large DataFrames** (≥ 1,000 rows or ≥ 20 columns): Use MCP to run `df.describe()` and/or `df.corr()` in the live kernel. Do NOT print the entire frame. Summarize key statistics from the output.
 - Always check shape first: `df.shape`
 
-### 4. Notebook Integrity
-- Edit ONLY `analysis.py`
+### 4. Notebook Lifecycle
+
+**Editing an existing notebook**: Edit only the `.py` file — Jupytext propagates to `.ipynb` automatically. Never directly edit any `.ipynb` file.
+
+**Creating a new notebook** — when the user asks to "save to a new notebook" or start a fresh analysis:
+1. Choose a concise kebab-case description (≤ 4 words) for the analysis topic.
+2. Get the current datetime in `YYYYMMDD-HHMM` format.
+3. Create `aigen-YYYYMMDD-HHMM-<concise-name>.py` starting with this Jupytext header:
+   ```python
+   # ---
+   # jupyter:
+   #   jupytext:
+   #     formats: py:percent,ipynb
+   #     text_representation:
+   #       extension: .py
+   #       format_name: percent
+   # ---
+   ```
+4. Run `jupytext --to ipynb aigen-YYYYMMDD-HHMM-<concise-name>.py` to generate the paired `.ipynb`.
+5. Create the TMP and DATA folders (see Rule 5).
+6. Define `NOTEBOOK_STEM = 'aigen-YYYYMMDD-HHMM-<concise-name>'` near the top of the new `.py` file.
+7. All subsequent edits go into the new `.py` file.
+
+In all notebooks:
 - Use py:percent cell format: cells are delimited by `# %%` markers
 - Add descriptive markdown cells above code cells using `# %% [markdown]` with `"""` docstrings
 - After editing, use MCP to restart/run cells to verify execution
+
+### 5. Notebook Folder Structure
+
+Immediately after creating a new notebook with stem `<stem>`, create two directories:
+
+- **TMP folder** `.tmp/<stem>/` — all artifacts (charts, `styled_table.xlsx`) for this notebook are saved here.
+- **DATA folder** `.data/<stem>/` — input data (CSVs, etc.) the user places here for use in the analysis.
+
+```bash
+mkdir -p .tmp/<stem> .data/<stem>
+```
+
+For `analysis.py` (the legacy default notebook), artifacts remain in the project root — no migration required.
 
 ## Workflow Pattern
 
 For each analysis request, follow this exact sequence:
 
+0. **Determine notebook context**: Are we adding to an existing notebook, or is a new one needed? If new, apply the naming and folder creation rules (Rules 4–5) before proceeding.
 1. **Understand the request**: Identify the business question, relevant tables, and appropriate aggregation.
 2. **Write SQL**: Craft an efficient BigQuery SQL query. Use `GCP_PROJECT` variable for project references.
-3. **Cache via `get_data`**: Insert the `get_data(sql)` call in `analysis.py`.
+3. **Cache via `get_data`**: Insert the `get_data(sql)` call in the active `.py` file.
 4. **Inspect**: Check shape, then apply smart inspection rules.
-5. **Visualize**: Choose the right chart type, render it, and save/display.
-6. **Export**: Generate `styled_table.xlsx` with outlier highlighting.
+5. **Visualize**: Choose the right chart type, render it, and save to `.tmp/<stem>/`.
+6. **Export**: Generate `.tmp/<stem>/styled_table.xlsx` with outlier highlighting.
 7. **Summarize**: Provide a 2-4 sentence plain-English interpretation of the key findings.
 
 ## Code Style
@@ -107,7 +145,9 @@ df.head()
 Before finalizing any analysis cell:
 - Verify `get_data` is used (not raw BQ client)
 - Confirm both artifacts (chart + xlsx) are produced
-- Ensure only `analysis.py` was modified
+- Ensure artifacts are saved to `.tmp/<stem>/`, not the project root (except `analysis.py` which keeps root paths)
+- For new notebooks: confirm `.tmp/<stem>/` and `.data/<stem>/` folders were created and `NOTEBOOK_STEM` is defined
+- Ensure only `.py` files were edited (never `.ipynb` directly)
 - Validate that the chart has title and axis labels
 - Confirm the xlsx has at least one conditional formatting rule
 

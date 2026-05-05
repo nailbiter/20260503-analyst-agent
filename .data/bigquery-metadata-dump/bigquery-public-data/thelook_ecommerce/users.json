@@ -1,0 +1,110 @@
+{
+  "kind": "bigquery#table",
+  "etag": "wH3m1HkAueqYNUXlpE6MxQ==",
+  "id": "bigquery-public-data:thelook_ecommerce.users",
+  "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/bigquery-public-data/datasets/thelook_ecommerce/tables/users",
+  "tableReference": {
+    "projectId": "bigquery-public-data",
+    "datasetId": "thelook_ecommerce",
+    "tableId": "users"
+  },
+  "description": "Programatically generated users for The Look fictitious e-commerce store",
+  "schema": {
+    "fields": [
+      {
+        "name": "id",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "first_name",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "last_name",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "email",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "age",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "gender",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "state",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "street_address",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "postal_code",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "city",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "country",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "latitude",
+        "type": "FLOAT",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "longitude",
+        "type": "FLOAT",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "traffic_source",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "user_geom",
+        "type": "GEOGRAPHY"
+      }
+    ]
+  },
+  "numBytes": "19818050",
+  "numLongTermBytes": "0",
+  "numRows": "100000",
+  "creationTime": "1645833123321",
+  "lastModifiedTime": "1777951039106",
+  "type": "TABLE",
+  "location": "US",
+  "numTimeTravelPhysicalBytes": "51864269",
+  "numTotalLogicalBytes": "19818050",
+  "numActiveLogicalBytes": "19818050",
+  "numLongTermLogicalBytes": "0",
+  "numTotalPhysicalBytes": "55873583",
+  "numActivePhysicalBytes": "55873583",
+  "numLongTermPhysicalBytes": "0",
+  "numCurrentPhysicalBytes": "4009314"
+}

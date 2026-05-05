@@ -1,0 +1,96 @@
+{
+  "kind": "bigquery#table",
+  "etag": "yvU/yIqVGZmWaHpw/K9HyA==",
+  "id": "bigquery-public-data:thelook_ecommerce.events",
+  "selfLink": "https://bigquery.googleapis.com/bigquery/v2/projects/bigquery-public-data/datasets/thelook_ecommerce/tables/events",
+  "tableReference": {
+    "projectId": "bigquery-public-data",
+    "datasetId": "thelook_ecommerce",
+    "tableId": "events"
+  },
+  "description": "Programatically generated web events for The Look fictitious e-commerce store",
+  "schema": {
+    "fields": [
+      {
+        "name": "id",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "user_id",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "sequence_number",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "session_id",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "ip_address",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "city",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "state",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "postal_code",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "browser",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "traffic_source",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "uri",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "event_type",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  "numBytes": "384127068",
+  "numLongTermBytes": "0",
+  "numRows": "2419378",
+  "creationTime": "1645833123282",
+  "lastModifiedTime": "1777951029746",
+  "type": "TABLE",
+  "location": "US",
+  "numTimeTravelPhysicalBytes": "693137464",
+  "numTotalLogicalBytes": "384127068",
+  "numActiveLogicalBytes": "384127068",
+  "numLongTermLogicalBytes": "0",
+  "numTotalPhysicalBytes": "792083342",
+  "numActivePhysicalBytes": "792083342",
+  "numLongTermPhysicalBytes": "0",
+  "numCurrentPhysicalBytes": "98945878"
+}
