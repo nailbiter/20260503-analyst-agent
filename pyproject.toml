@@ -9,8 +9,14 @@ dependencies = [
     "google-cloud-bigquery>=3.41.0",
     "jupyterlab>=4.5.7",
     "jupytext>=1.19.1",
+    "matplotlib>=3.10.9",
+    "openpyxl>=3.1.5",
     "pandas>=3.0.2",
     "pandas-gbq>=0.35.0",
     "pyarrow>=24.0.0",
     "python-dotenv>=1.2.2",
+    "seaborn>=0.13.2",
 ]
+
+[tool.jupytext]
+formats = "ipynb,py:percent"
