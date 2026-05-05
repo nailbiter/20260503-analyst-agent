@@ -4,7 +4,7 @@
       "command": "uvx",
       "args": ["mcp-jupyter"],
       "env": {
-        "TOKEN": "MY_TOKEN"
+        "TOKEN": "${JUPYTER_TOKEN}"
       }
     }
   }

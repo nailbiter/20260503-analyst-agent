@@ -18,9 +18,11 @@
 # %%
 import pandas as pd
 import os
+from dotenv import load_dotenv
 from google.cloud import bigquery
 
-GCP_PROJECT = "your-gcp-project-id"  # replace with your project ID
+load_dotenv()
+GCP_PROJECT = os.environ["GCP_PROJECT"]
 
 def get_data(sql, project_id=GCP_PROJECT, force=False):
     cache_path = f"cache/{pd.util.hash_pandas_object(pd.Series([sql])).iloc[0]}.parquet"
