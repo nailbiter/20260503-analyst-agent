@@ -2,3 +2,6 @@
 .env
 cache/
 .ipynb_checkpoints/
+
+## emacs
+*~
